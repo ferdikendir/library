@@ -21,19 +21,24 @@ public class BookUserController {
         this.bookUserService = bookUserService;
     }
 
-    @PostMapping("/insert")
-    public BookUser insertBookUser(@RequestBody BookUserAddRequestModel bookUserAddRequestModel) {
-        return  bookUserService.insert(bookUserAddRequestModel);
-    }
-
     @PostMapping("/list")
     public List<BookUser> list() {
         return  bookUserService.findAll();
     }
 
+    @PostMapping("/insert")
+    public BookUser insertBookUser(@RequestBody BookUserAddRequestModel bookUserAddRequestModel) {
+        return  bookUserService.insert(bookUserAddRequestModel);
+    }
+
     @PostMapping("/update")
     public BookUser updateBookUser(@RequestBody BookUserUpdateRequestModel bookUserUpdateRequestModel) {
         return  bookUserService.update(bookUserUpdateRequestModel);
+    }
+
+    @PostMapping("/check_book")
+    public boolean checkBookControl(@RequestBody BookUser bookUser) {
+        return bookUserService.checkBorrowBook(bookUser.getId());
     }
 
 }

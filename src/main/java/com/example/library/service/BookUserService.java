@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class BookUserService {
@@ -32,16 +33,16 @@ public class BookUserService {
 
     public BookUser insert(BookUserAddRequestModel bookUserAddRequestModel) {
 
-        User user = userRepository.findById(bookUserAddRequestModel.getUser_id()).get();
+        User user = userRepository.findById(UUID.fromString(bookUserAddRequestModel.getUser_id())).get();
 
-        Book book = bookRepository.findById(bookUserAddRequestModel.getBook_id()).get();
+        Book book = bookRepository.findById(UUID.fromString(bookUserAddRequestModel.getBook_id())).get();
 
         BookUser bookUser = new BookUser();
 
         bookUser.setUser(user);
         bookUser.setBook(book);
         bookUser.setBorrowedDate(LocalDate.now());
-        bookUser.setDueDate(bookUserAddRequestModel.getDueDate());
+        bookUser.setDueDate(LocalDate.parse(bookUserAddRequestModel.getDueDate().toString()));
 
         return bookUserRepository.save(bookUser);
 
@@ -59,5 +60,22 @@ public class BookUserService {
         bookUser.setDueDate(bookUserUpdateRequestModel.getDueDate());
 
         return bookUserRepository.save(bookUser);
+    }
+
+    public boolean checkBorrowBook(UUID bookId) {
+        Book book = bookRepository.findById(bookId).get();
+
+        BookUser bookUser = bookUserRepository.getByBook(book);
+
+        if (bookUser == null) {
+            return true;
+        }
+
+        if (bookUser.getDueDate().isBefore(LocalDate.now())) {
+            return true;
+        }
+
+        return false;
+
     }
 }

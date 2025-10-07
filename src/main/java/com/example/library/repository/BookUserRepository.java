@@ -1,5 +1,6 @@
 package com.example.library.repository;
 
+import com.example.library.entity.Book;
 import com.example.library.entity.BookUser;
 import org.springframework.data.jpa.repository.JpaRepository;
 
@@ -9,4 +10,6 @@ import java.util.UUID;
 public interface BookUserRepository   extends JpaRepository<BookUser, UUID> {
 
     Optional<BookUser> findById(UUID id);
+
+    BookUser getByBook(Book book);
 }
