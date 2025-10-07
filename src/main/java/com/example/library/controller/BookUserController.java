@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/book_user")
@@ -39,6 +40,11 @@ public class BookUserController {
     @PostMapping("/check_book")
     public boolean checkBookControl(@RequestBody BookUser bookUser) {
         return bookUserService.checkBorrowBook(bookUser.getId());
+    }
+
+    @PostMapping("/mark_as_returned")
+    public BookUser markBookAsReturned(@RequestBody BookUserUpdateRequestModel bookUserUpdateRequestModel) {
+        return bookUserService.markAsReturned(bookUserUpdateRequestModel.getId());
     }
 
 }

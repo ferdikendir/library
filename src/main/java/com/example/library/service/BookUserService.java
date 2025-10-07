@@ -43,6 +43,7 @@ public class BookUserService {
         bookUser.setBook(book);
         bookUser.setBorrowedDate(LocalDate.now());
         bookUser.setDueDate(LocalDate.parse(bookUserAddRequestModel.getDueDate().toString()));
+        bookUser.setReturned(false);
 
         return bookUserRepository.save(bookUser);
 
@@ -71,11 +72,24 @@ public class BookUserService {
             return true;
         }
 
+        if (bookUser.isReturned()) {
+            return true;
+        }
+
         if (bookUser.getDueDate().isBefore(LocalDate.now())) {
             return true;
         }
 
         return false;
 
+    }
+
+    public BookUser markAsReturned(UUID id) {
+
+        BookUser bookUser = bookUserRepository.getById(id);
+
+        bookUser.setDueDate(LocalDate.now());
+        bookUser.setReturned(true);
+        return bookUserRepository.save(bookUser);
     }
 }

@@ -13,5 +13,6 @@ public class BookUserUpdateRequestModel {
     private String book_id;
     private LocalDate borrowedDate;
     private LocalDate dueDate;
+    private boolean isReturned;
 
 }
