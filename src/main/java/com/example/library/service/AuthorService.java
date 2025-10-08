@@ -32,7 +32,7 @@ public class AuthorService {
 
             authorDto.setId(author.getId());
             authorDto.setName(author.getName());
-            authors.add(authorDto);
+            authorDto.setSurname(author.getSurname());
 
             authors.add(authorDto);
         }
