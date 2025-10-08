@@ -1,11 +1,12 @@
 package com.example.library.dto.book;
 
-import com.example.library.entity.Author;
+import com.example.library.dto.author.AuthorDto;
 import lombok.Data;
+
 import java.util.UUID;
 
 @Data
-public class BookListResponseModel {
+public class BookDto {
 
     private UUID id;
     private String isbn;
@@ -13,7 +14,6 @@ public class BookListResponseModel {
     private String edition;
     private String year;
     private UUID author_id;
-    private Author author;
+    private AuthorDto author;
     private boolean available;
-
 }

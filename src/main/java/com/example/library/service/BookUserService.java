@@ -69,9 +69,9 @@ public class BookUserService {
     }
 
     public BookUser update(BookUserUpdateRequestModel bookUserUpdateRequestModel) {
-        User user = userRepository.findById(bookUserUpdateRequestModel.getUser_id()).get();
+        User user = userRepository.findById(UUID.fromString(bookUserUpdateRequestModel.getUser_id())).get();
 
-        Book book = bookRepository.findById(bookUserUpdateRequestModel.getBook_id()).get();
+        Book book = bookRepository.findById(UUID.fromString(bookUserUpdateRequestModel.getBook_id())).get();
 
         BookUser bookUser = new BookUser();
         bookUser.setUser(user);

@@ -1,8 +1,7 @@
 package com.example.library.controller;
 
-import com.example.library.dto.book.BookListResponseModel;
+import com.example.library.dto.book.BookDto;
 import com.example.library.dto.book.BookRequestModel;
-import com.example.library.entity.Book;
 import com.example.library.service.BookService;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -22,17 +21,18 @@ public class BookController {
     }
 
     @PostMapping("/list")
-    public List<BookListResponseModel> getBooks() {
+    public List<BookDto> getBooks() {
+        return bookService.findAll();
         return bookService.findAll();
     }
 
     @PostMapping("/insert")
-    public Book insert(@RequestBody BookRequestModel bookRequestModel) {
+    public BookDto insert(@RequestBody BookRequestModel bookRequestModel) {
         return  bookService.insert(bookRequestModel);
     }
 
     @PostMapping("/update")
-    public Book update(@RequestBody BookRequestModel bookRequestModel) {
+    public BookDto update(@RequestBody BookRequestModel bookRequestModel) {
         return  bookService.update(bookRequestModel);
     }
 
