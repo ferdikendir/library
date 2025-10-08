@@ -23,7 +23,6 @@ public class BookController {
     @PostMapping("/list")
     public List<BookDto> getBooks() {
         return bookService.findAll();
-        return bookService.findAll();
     }
 
     @PostMapping("/insert")
