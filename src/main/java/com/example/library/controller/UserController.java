@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/user")
+@RequestMapping("/api/User")
 public class UserController {
 
     private final UserService userService;
@@ -21,12 +21,12 @@ public class UserController {
         this.userService = userService;
     }
 
-    @PostMapping("/list")
+    @PostMapping("/List")
     public List<UserDto> list() {
         return userService.list();
     }
 
-    @PostMapping("/update")
+    @PostMapping("/Update")
     public UserDto update(@RequestBody UserUpdateRequest userUpdateRequest) {
         return userService.update(userUpdateRequest);
     }

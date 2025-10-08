@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/author")
+@RequestMapping("/api/Author")
 public class AuthorController {
 
     private final AuthorService authorService;
@@ -22,17 +22,17 @@ public class AuthorController {
         this.authorService = authorService;
     }
 
-    @PostMapping("/list")
+    @PostMapping("/List")
     public List<AuthorDto> list() {
         return  authorService.getAllAuthors();
     }
 
-    @PostMapping("/insert")
+    @PostMapping("/Insert")
     public AuthorDto create(@RequestBody AuthorInsertRequest author) {
         return  authorService.saveAuthor(author);
     }
 
-    @PostMapping("/update")
+    @PostMapping("/Update")
     public AuthorDto update(@RequestBody AuthorUpdateRequest authorUpdateRequest) {
         return  authorService.updateAuthor(authorUpdateRequest);
     }

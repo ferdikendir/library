@@ -8,7 +8,7 @@ import com.example.library.service.AuthService;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/auth")
+@RequestMapping("/api/Auth")
 public class AuthController {
 
     private final AuthService authService;
@@ -16,12 +16,12 @@ public class AuthController {
         this.authService = authService;
     }
 
-    @PostMapping("/login")
+    @PostMapping("/Login")
     public LoginResponse login(@RequestBody LoginRequest request) {
         return authService.login(request);
     }
 
-    @PostMapping("/register")
+    @PostMapping("/Register")
     public RegisterResponse register(@RequestBody RegisterRequest request) {
         return  authService.register(request);
     }

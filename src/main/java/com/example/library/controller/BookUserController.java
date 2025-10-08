@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/api/book_user")
+@RequestMapping("/api/BookUser")
 public class BookUserController {
 
     private final BookUserService bookUserService;
@@ -23,32 +23,32 @@ public class BookUserController {
         this.bookUserService = bookUserService;
     }
 
-    @PostMapping("/get_my_book_list")
+    @PostMapping("/MyBookList")
     public List<BookUserDto> getMyBoookList() {
         return  bookUserService.findAll();
     }
 
-    @PostMapping("/list")
+    @PostMapping("/List")
     public List<BookUserDto> list() {
         return  bookUserService.findAll();
     }
 
-    @PostMapping("/insert")
+    @PostMapping("/Insert")
     public BookUserDto insertBookUser(@RequestBody BookUserAddRequestModel bookUserAddRequestModel) {
         return  bookUserService.insert(bookUserAddRequestModel);
     }
 
-    @PostMapping("/update")
+    @PostMapping("/Update")
     public BookUserDto updateBookUser(@RequestBody BookUserUpdateRequestModel bookUserUpdateRequestModel) {
         return  bookUserService.update(bookUserUpdateRequestModel);
     }
 
-    @PostMapping("/check_book")
+    @PostMapping("/CheckBook")
     public boolean checkBookControl(@RequestBody BookUser bookUser) {
         return bookUserService.checkBorrowBook(bookUser.getId());
     }
 
-    @PostMapping("/mark_as_returned")
+    @PostMapping("/MarkAsReturned")
     public BookUserDto markBookAsReturned(@RequestBody BookUserUpdateRequestModel bookUserUpdateRequestModel) {
         return bookUserService.markAsReturned(bookUserUpdateRequestModel.getId());
     }
