@@ -1,32 +1,46 @@
 package com.example.library.service;
 
+import com.example.library.dto.user.UserDto;
+import com.example.library.dto.user.UserUpdateRequest;
 import com.example.library.entity.User;
+import com.example.library.mapper.UserMapper;
 import com.example.library.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
 public class UserService {
 
     private final UserRepository userRepository;
+    private final UserMapper userMapper;
 
-    public UserService(UserRepository userRepository) {
+    public UserService(UserRepository userRepository, UserMapper userMapper) {
         this.userRepository = userRepository;
+        this.userMapper = userMapper;
     }
 
-    public List<User> list() {
-        return userRepository.list();
+    public List<UserDto> list() {
+        List<User> users = userRepository.list();
+
+        List<UserDto> userDtos = new ArrayList<>();
+
+        for (User user : users) {
+            userDtos.add(userMapper.toUserDto(user));
+        }
+
+        return userDtos;
     }
 
-    public User update(User user) {
+    public UserDto update(UserUpdateRequest userUpdateRequest) {
 
-        User oldUser = userRepository.findById(user.getId()).get();
+        User oldUser = userRepository.findById(userUpdateRequest.getId()).get();
 
-        oldUser.setName(user.getName());
-        oldUser.setSurname(user.getSurname());
+        oldUser.setName(userUpdateRequest.getName());
+        oldUser.setSurname(userUpdateRequest.getSurname());
 
-        return userRepository.save(oldUser);
+        return userMapper.toUserDto(userRepository.save(oldUser));
 
     }
 }

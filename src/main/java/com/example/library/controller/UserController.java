@@ -1,5 +1,7 @@
 package com.example.library.controller;
 
+import com.example.library.dto.user.UserDto;
+import com.example.library.dto.user.UserUpdateRequest;
 import com.example.library.entity.User;
 import com.example.library.service.UserService;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -20,12 +22,12 @@ public class UserController {
     }
 
     @PostMapping("/list")
-    public List<User> list() {
+    public List<UserDto> list() {
         return userService.list();
     }
 
     @PostMapping("/update")
-    public User update(@RequestBody User user) {
-        return userService.update(user);
+    public UserDto update(@RequestBody UserUpdateRequest userUpdateRequest) {
+        return userService.update(userUpdateRequest);
     }
 }
