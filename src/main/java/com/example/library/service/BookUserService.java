@@ -85,7 +85,7 @@ public class BookUserService {
     public boolean checkBorrowBook(UUID bookId) {
         Book book = bookRepository.findById(bookId).get();
 
-        BookUser bookUser = bookUserRepository.getByBook(book);
+        BookUser bookUser = bookUserRepository.borrowBookNow(book);
 
         if (bookUser == null) {
             return true;

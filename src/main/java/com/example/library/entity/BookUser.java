@@ -34,7 +34,7 @@ public class BookUser {
     @Column( nullable = false)
     private LocalDate dueDate;
 
-    @Column(nullable = true)
+    @Column(nullable = false)
     private boolean returned;
 
 
