@@ -41,6 +41,8 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             return;
         }
 
+        try {
+
         final String jwt;
         final UUID systemUserId;
 
@@ -79,6 +81,9 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         }
 
         filterChain.doFilter(request, response);
+        } catch (Exception e) {
+            sendUnauthorizedResponse(response, "Token işlenemedi veya geçersiz formatta.");
+        }
     }
 
     private void sendUnauthorizedResponse(HttpServletResponse response, String message) throws IOException {

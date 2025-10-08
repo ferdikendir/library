@@ -1,5 +1,6 @@
 package com.example.library.controller;
 
+import com.example.library.dto.book.BookListResponseModel;
 import com.example.library.dto.book.BookRequestModel;
 import com.example.library.entity.Book;
 import com.example.library.service.BookService;
@@ -21,7 +22,7 @@ public class BookController {
     }
 
     @PostMapping("/list")
-    public List<Book> getBooks() {
+    public List<BookListResponseModel> getBooks() {
         return bookService.findAll();
     }
 

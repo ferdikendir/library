@@ -18,4 +18,15 @@ public class UserService {
     public List<User> list() {
         return userRepository.list();
     }
+
+    public User update(User user) {
+
+        User oldUser = userRepository.findById(user.getId()).get();
+
+        oldUser.setName(user.getName());
+        oldUser.setSurname(user.getSurname());
+
+        return userRepository.save(oldUser);
+
+    }
 }
