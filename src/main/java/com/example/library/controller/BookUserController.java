@@ -22,6 +22,11 @@ public class BookUserController {
         this.bookUserService = bookUserService;
     }
 
+    @PostMapping("/get_my_book_list")
+    public List<BookUser> getMyBoookList() {
+        return  bookUserService.findAll();
+    }
+
     @PostMapping("/list")
     public List<BookUser> list() {
         return  bookUserService.findAll();

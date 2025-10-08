@@ -8,6 +8,8 @@ import com.example.library.entity.User;
 import com.example.library.repository.BookRepository;
 import com.example.library.repository.BookUserRepository;
 import com.example.library.repository.UserRepository;
+import com.example.library.security.JwtUtil;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -20,11 +22,28 @@ public class BookUserService {
     private final BookUserRepository bookUserRepository;
     private final UserRepository userRepository;
     private final BookRepository bookRepository;
+    private final HttpServletRequest request;
+    private final JwtUtil jwtUtil;
 
-    public BookUserService(BookUserRepository bookUserRepository, UserRepository userRepository, BookRepository bookRepository) {
+    public BookUserService(
+            BookUserRepository bookUserRepository,
+            UserRepository userRepository,
+            BookRepository bookRepository,
+            HttpServletRequest request,
+            JwtUtil jwtUtil) {
         this.bookUserRepository = bookUserRepository;
         this.userRepository = userRepository;
         this.bookRepository = bookRepository;
+        this.request = request;
+        this.jwtUtil = jwtUtil;
+    }
+
+    public List<BookUser> getMyBook() {
+        String authHeader = request.getHeader("Authorization");
+        String token = authHeader.substring(7);
+        UUID userId = jwtUtil.extractSystemUserId(token);
+
+        return bookUserRepository.findByUser_Id(userId);
     }
 
     public List<BookUser> findAll() {
