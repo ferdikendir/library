@@ -1,9 +1,6 @@
 package com.example.library.service;
 
-import com.example.library.dto.auth.LoginRequest;
-import com.example.library.dto.auth.LoginResponse;
-import com.example.library.dto.auth.RegisterRequest;
-import com.example.library.dto.auth.RegisterResponse;
+import com.example.library.dto.auth.*;
 import com.example.library.entity.User;
 import com.example.library.repository.UserRepository;
 import com.example.library.security.JwtUtil;

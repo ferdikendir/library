@@ -1,17 +1,10 @@
 package com.example.library.controller;
 
-import com.example.library.dto.bookUser.BookUserAddRequestModel;
-import com.example.library.dto.bookUser.BookUserDto;
-import com.example.library.dto.bookUser.BookUserUpdateRequestModel;
-import com.example.library.entity.BookUser;
+import com.example.library.dto.bookUser.*;
 import com.example.library.service.BookUserService;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/BookUser")
@@ -44,8 +37,8 @@ public class BookUserController {
     }
 
     @PostMapping("/CheckBook")
-    public boolean checkBookControl(@RequestBody BookUser bookUser) {
-        return bookUserService.checkBorrowBook(bookUser.getId());
+    public boolean checkBookControl(@RequestBody BookUserDto bookUserDto) {
+        return bookUserService.checkBorrowBook(bookUserDto.getId());
     }
 
     @PostMapping("/MarkAsReturned")

@@ -1,12 +1,8 @@
 package com.example.library.controller;
 
-import com.example.library.dto.book.BookDto;
-import com.example.library.dto.book.BookRequestModel;
+import com.example.library.dto.book.*;
 import com.example.library.service.BookService;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 

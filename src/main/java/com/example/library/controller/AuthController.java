@@ -1,9 +1,6 @@
 package com.example.library.controller;
 
-import com.example.library.dto.auth.LoginRequest;
-import com.example.library.dto.auth.LoginResponse;
-import com.example.library.dto.auth.RegisterRequest;
-import com.example.library.dto.auth.RegisterResponse;
+import com.example.library.dto.auth.*;
 import com.example.library.service.AuthService;
 import org.springframework.web.bind.annotation.*;
 

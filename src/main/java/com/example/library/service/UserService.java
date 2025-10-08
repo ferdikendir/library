@@ -1,14 +1,12 @@
 package com.example.library.service;
 
-import com.example.library.dto.user.UserDto;
-import com.example.library.dto.user.UserUpdateRequest;
+import com.example.library.dto.user.*;
 import com.example.library.entity.User;
 import com.example.library.mapper.UserMapper;
 import com.example.library.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 @Service
 public class UserService {
