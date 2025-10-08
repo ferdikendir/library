@@ -12,10 +12,6 @@ import java.util.UUID;
 
 public interface BookUserRepository   extends JpaRepository<BookUser, UUID> {
 
-    Optional<BookUser> findById(UUID id);
-
-    BookUser getByBook(Book book);
-
     List<BookUser> findByUser_Id(UUID userId);
 
     @Query("SELECT u FROM BookUser u WHERE u.returned = false and u.book = :book ")

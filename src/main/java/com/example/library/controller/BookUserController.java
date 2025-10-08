@@ -1,6 +1,7 @@
 package com.example.library.controller;
 
 import com.example.library.dto.bookUser.BookUserAddRequestModel;
+import com.example.library.dto.bookUser.BookUserDto;
 import com.example.library.dto.bookUser.BookUserUpdateRequestModel;
 import com.example.library.entity.BookUser;
 import com.example.library.service.BookUserService;
@@ -23,22 +24,22 @@ public class BookUserController {
     }
 
     @PostMapping("/get_my_book_list")
-    public List<BookUser> getMyBoookList() {
+    public List<BookUserDto> getMyBoookList() {
         return  bookUserService.findAll();
     }
 
     @PostMapping("/list")
-    public List<BookUser> list() {
+    public List<BookUserDto> list() {
         return  bookUserService.findAll();
     }
 
     @PostMapping("/insert")
-    public BookUser insertBookUser(@RequestBody BookUserAddRequestModel bookUserAddRequestModel) {
+    public BookUserDto insertBookUser(@RequestBody BookUserAddRequestModel bookUserAddRequestModel) {
         return  bookUserService.insert(bookUserAddRequestModel);
     }
 
     @PostMapping("/update")
-    public BookUser updateBookUser(@RequestBody BookUserUpdateRequestModel bookUserUpdateRequestModel) {
+    public BookUserDto updateBookUser(@RequestBody BookUserUpdateRequestModel bookUserUpdateRequestModel) {
         return  bookUserService.update(bookUserUpdateRequestModel);
     }
 
@@ -48,7 +49,7 @@ public class BookUserController {
     }
 
     @PostMapping("/mark_as_returned")
-    public BookUser markBookAsReturned(@RequestBody BookUserUpdateRequestModel bookUserUpdateRequestModel) {
+    public BookUserDto markBookAsReturned(@RequestBody BookUserUpdateRequestModel bookUserUpdateRequestModel) {
         return bookUserService.markAsReturned(bookUserUpdateRequestModel.getId());
     }
 
