@@ -52,6 +52,11 @@ public class BookService {
     }
 
     public Book insert(BookRequestModel bookRequestModel) {
+
+        if(bookRepository.findByIsbn(bookRequestModel.getIsbn()).isPresent()) {
+            throw new RuntimeException("Isbn already exists");
+        }
+
         Book book = new Book();
         book.setTitle(bookRequestModel.getTitle());
         book.setYear(bookRequestModel.getYear());
