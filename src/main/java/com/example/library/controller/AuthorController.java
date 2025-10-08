@@ -1,5 +1,8 @@
 package com.example.library.controller;
 
+import com.example.library.dto.author.AuthorDto;
+import com.example.library.dto.author.AuthorInsertRequest;
+import com.example.library.dto.author.AuthorUpdateRequest;
 import com.example.library.entity.Author;
 import com.example.library.service.AuthorService;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -20,17 +23,17 @@ public class AuthorController {
     }
 
     @PostMapping("/list")
-    public List<Author> list() {
+    public List<AuthorDto> list() {
         return  authorService.getAllAuthors();
     }
 
     @PostMapping("/insert")
-    public Author create(@RequestBody Author author) {
+    public AuthorDto create(@RequestBody AuthorInsertRequest author) {
         return  authorService.saveAuthor(author);
     }
 
     @PostMapping("/update")
-    public Author update(@RequestBody Author author) {
-        return  authorService.updateAuthor(author);
+    public AuthorDto update(@RequestBody AuthorUpdateRequest authorUpdateRequest) {
+        return  authorService.updateAuthor(authorUpdateRequest);
     }
 }
