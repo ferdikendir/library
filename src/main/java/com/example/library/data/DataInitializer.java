@@ -1,15 +1,8 @@
 package com.example.library.data;
 
-import com.example.library.entity.Author;
-import com.example.library.entity.Book;
-import com.example.library.entity.User;
-import com.example.library.repository.AuthorRepository;
-import com.example.library.repository.BookRepository;
-import com.example.library.repository.UserRepository;
-import org.springframework.boot.CommandLineRunner;
+import com.example.library.entity.*;
+import com.example.library.repository.*;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.context.event.EventListener;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;

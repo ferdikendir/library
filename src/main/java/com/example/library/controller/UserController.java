@@ -1,16 +1,13 @@
 package com.example.library.controller;
 
-import com.example.library.entity.User;
+import com.example.library.dto.user.*;
 import com.example.library.service.UserService;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/user")
+@RequestMapping("/api/User")
 public class UserController {
 
     private final UserService userService;
@@ -19,13 +16,13 @@ public class UserController {
         this.userService = userService;
     }
 
-    @PostMapping("/list")
-    public List<User> list() {
+    @PostMapping("/List")
+    public List<UserDto> list() {
         return userService.list();
     }
 
-    @PostMapping("/update")
-    public User update(@RequestBody User user) {
-        return userService.update(user);
+    @PostMapping("/Update")
+    public UserDto update(@RequestBody UserUpdateRequest userUpdateRequest) {
+        return userService.update(userUpdateRequest);
     }
 }

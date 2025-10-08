@@ -1,17 +1,12 @@
 package com.example.library.service;
 
-import com.example.library.dto.book.BookListResponseModel;
-import com.example.library.dto.book.BookRequestModel;
-import com.example.library.entity.Author;
-import com.example.library.entity.Book;
-import com.example.library.repository.AuthorRepository;
-import com.example.library.repository.BookRepository;
-import com.example.library.repository.BookUserRepository;
+import com.example.library.dto.book.*;
+import com.example.library.entity.*;
+import com.example.library.mapper.*;
+import com.example.library.repository.*;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 public class BookService {
@@ -19,73 +14,77 @@ public class BookService {
     private final BookRepository bookRepository;
     private final AuthorRepository authorRepository;
     private final BookUserService bookUserService;
+    private final BookMapper bookMapper;
+    private final AuthorMapper authorMapper;
 
-    public BookService(BookRepository bookRepository, AuthorRepository authorRepository, BookUserService bookUserService) {
+    public BookService(BookRepository bookRepository, AuthorRepository authorRepository, BookUserService bookUserService, BookMapper bookMapper, AuthorMapper authorMapper) {
         this.bookRepository = bookRepository;
         this.authorRepository = authorRepository;
         this.bookUserService = bookUserService;
+        this.bookMapper = bookMapper;
+        this.authorMapper = authorMapper;
     }
 
-    public List<BookListResponseModel> findAll() {
+    public List<BookDto> findAll() {
 
         List<Book> books = bookRepository.findAll();
 
-        List<BookListResponseModel> bookListResponseModels = new ArrayList<>();
+        List<BookDto> bookDtos = new ArrayList<>();
 
         for (Book book : books) {
-            BookListResponseModel bookListResponseModel = new BookListResponseModel();
+            BookDto bookDto = new BookDto();
 
-            bookListResponseModel.setId(book.getId());
-            bookListResponseModel.setIsbn(book.getIsbn());
-            bookListResponseModel.setTitle(book.getTitle());
-            bookListResponseModel.setEdition(book.getEdition());
-            bookListResponseModel.setYear(book.getYear());
-            bookListResponseModel.setAuthor_id(book.getAuthor().getId());
-            bookListResponseModel.setAuthor(book.getAuthor());
+            bookDto.setId(book.getId());
+            bookDto.setIsbn(book.getIsbn());
+            bookDto.setTitle(book.getTitle());
+            bookDto.setEdition(book.getEdition());
+            bookDto.setYear(book.getYear());
+            bookDto.setAuthor_id(book.getAuthor().getId());
+            bookDto.setAuthor(authorMapper.toAuthorDto(book.getAuthor()));
 
-            bookListResponseModel.setAvailable(bookUserService.checkBorrowBook(book.getId()));
+            bookDto.setAvailable(bookUserService.checkBorrowBook(book.getId()));
 
-            bookListResponseModels.add(bookListResponseModel);
+            bookDtos.add(bookDto);
         }
 
-        return bookListResponseModels;
+        return bookDtos;
     }
 
-    public Book insert(BookRequestModel bookRequestModel) {
+    public BookDto insert(BookRequestModel bookRequestModel) {
 
         if(bookRepository.findByIsbn(bookRequestModel.getIsbn()).isPresent()) {
             throw new RuntimeException("Isbn already exists");
         }
 
         Book book = new Book();
-        book.setTitle(bookRequestModel.getTitle());
-        book.setYear(bookRequestModel.getYear());
-        book.setIsbn(bookRequestModel.getIsbn());
-        book.setEdition(bookRequestModel.getEdition());
+        setBookFields(book, bookRequestModel);
 
-        Author author = authorRepository.findById( UUID.fromString(bookRequestModel.getAuthor_id())).get();
+        return bookMapper.toBookDto(bookRepository.save(book));
+
+    }
+
+    public BookDto update(BookRequestModel bookRequestModel) {
+
+        Book updatedBook = bookRepository.findByIsbn(bookRequestModel.getIsbn())
+                .orElseThrow(() -> new RuntimeException("Book not found"));
+
+        setBookFields(updatedBook, bookRequestModel);
+
+        return bookMapper.toBookDto(bookRepository.save(updatedBook));
+
+    }
+
+    private void setBookFields(Book book, BookRequestModel model) {
+        book.setTitle(model.getTitle());
+        book.setYear(model.getYear());
+        book.setIsbn(model.getIsbn());
+        book.setEdition(model.getEdition());
+
+        Author author = authorRepository.findById(UUID.fromString(model.getAuthor_id()))
+                .orElseThrow(() -> new RuntimeException("Author not found"));
 
         book.setAuthor(author);
-
-        return bookRepository.save(book);
-
     }
 
-    public Book update(BookRequestModel bookRequestModel) {
-
-        Book updatedBook = bookRepository.findByIsbn(bookRequestModel.getIsbn()).get();
-
-        updatedBook.setTitle(bookRequestModel.getTitle());
-        updatedBook.setYear(bookRequestModel.getYear());
-        updatedBook.setIsbn(bookRequestModel.getIsbn());
-        updatedBook.setEdition(bookRequestModel.getEdition());
-
-        Author author = authorRepository.findById( UUID.fromString(bookRequestModel.getAuthor_id())).get();
-
-        updatedBook.setAuthor(author);
-
-        return bookRepository.save(updatedBook);
-
-    }
 
 }

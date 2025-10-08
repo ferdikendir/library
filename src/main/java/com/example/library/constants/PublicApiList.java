@@ -6,8 +6,8 @@ import java.util.List;
 public class PublicApiList {
 
     private static final List<String> PUBLIC_API_LIST = List.of(
-            "/api/auth/login",
-            "/api/auth/register"
+            "/api/Auth/Login",
+            "/api/Auth/Register"
     );
 
     public static List<String> getPublicApiList() {

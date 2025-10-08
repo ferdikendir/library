@@ -1,20 +1,15 @@
 package com.example.library.service;
 
-import com.example.library.dto.bookUser.BookUserAddRequestModel;
-import com.example.library.dto.bookUser.BookUserUpdateRequestModel;
-import com.example.library.entity.Book;
-import com.example.library.entity.BookUser;
-import com.example.library.entity.User;
-import com.example.library.repository.BookRepository;
-import com.example.library.repository.BookUserRepository;
-import com.example.library.repository.UserRepository;
+import com.example.library.dto.bookUser.*;
+import com.example.library.entity.*;
+import com.example.library.mapper.BookUserMapper;
+import com.example.library.repository.*;
 import com.example.library.security.JwtUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 public class BookUserService {
@@ -24,37 +19,55 @@ public class BookUserService {
     private final BookRepository bookRepository;
     private final HttpServletRequest request;
     private final JwtUtil jwtUtil;
+    private final BookUserMapper bookUserMapper;
 
     public BookUserService(
             BookUserRepository bookUserRepository,
             UserRepository userRepository,
             BookRepository bookRepository,
             HttpServletRequest request,
-            JwtUtil jwtUtil) {
+            JwtUtil jwtUtil,
+            BookUserMapper bookUserMapper) {
         this.bookUserRepository = bookUserRepository;
         this.userRepository = userRepository;
         this.bookRepository = bookRepository;
         this.request = request;
         this.jwtUtil = jwtUtil;
+        this.bookUserMapper = bookUserMapper;
     }
 
-    public List<BookUser> getMyBook() {
+    public List<BookUserDto> getMyBook() {
         String authHeader = request.getHeader("Authorization");
         String token = authHeader.substring(7);
         UUID userId = jwtUtil.extractSystemUserId(token);
 
-        return bookUserRepository.findByUser_Id(userId);
+        List<BookUser> bookUsers = bookUserRepository.findByUser_Id(userId);
+
+        List<BookUserDto> bookUserDtos = new ArrayList<>();
+        for (BookUser bookUser : bookUsers) {
+            bookUserDtos.add(bookUserMapper.toBookUser(bookUser));
+        }
+
+        return bookUserDtos;
     }
 
-    public List<BookUser> findAll() {
-        return bookUserRepository.findAll();
+    public List<BookUserDto> findAll() {
+        List<BookUser> bookUsers =bookUserRepository.findAll();
+
+        List<BookUserDto> bookUserDtos = new ArrayList<>();
+
+        for (BookUser bookUser : bookUsers) {
+            bookUserDtos.add(bookUserMapper.toBookUser(bookUser));
+        }
+
+        return bookUserDtos;
     }
 
-    public BookUser insert(BookUserAddRequestModel bookUserAddRequestModel) {
+    public BookUserDto insert(BookUserAddRequestModel bookUserAddRequestModel) {
 
-        User user = userRepository.findById(UUID.fromString(bookUserAddRequestModel.getUser_id())).get();
+        User user = findUser(UUID.fromString(bookUserAddRequestModel.getUser_id()));
 
-        Book book = bookRepository.findById(UUID.fromString(bookUserAddRequestModel.getBook_id())).get();
+        Book book = findBook(UUID.fromString(bookUserAddRequestModel.getBook_id()));
 
         BookUser bookUser = new BookUser();
 
@@ -64,22 +77,23 @@ public class BookUserService {
         bookUser.setDueDate(LocalDate.parse(bookUserAddRequestModel.getDueDate().toString()));
         bookUser.setReturned(false);
 
-        return bookUserRepository.save(bookUser);
+        return bookUserMapper.toBookUser(bookUserRepository.save(bookUser));
 
     }
 
-    public BookUser update(BookUserUpdateRequestModel bookUserUpdateRequestModel) {
-        User user = userRepository.findById(bookUserUpdateRequestModel.getUser_id()).get();
+    public BookUserDto update(BookUserUpdateRequestModel bookUserUpdateRequestModel) {
+        User user = findUser(UUID.fromString(bookUserUpdateRequestModel.getUser_id()));
 
-        Book book = bookRepository.findById(bookUserUpdateRequestModel.getBook_id()).get();
+        Book book = findBook(UUID.fromString(bookUserUpdateRequestModel.getBook_id()));
 
         BookUser bookUser = new BookUser();
+
         bookUser.setUser(user);
         bookUser.setBook(book);
         bookUser.setBorrowedDate(bookUserUpdateRequestModel.getBorrowedDate());
         bookUser.setDueDate(bookUserUpdateRequestModel.getDueDate());
 
-        return bookUserRepository.save(bookUser);
+        return bookUserMapper.toBookUser(bookUserRepository.save(bookUser));
     }
 
     public boolean checkBorrowBook(UUID bookId) {
@@ -95,20 +109,31 @@ public class BookUserService {
             return true;
         }
 
-        if (bookUser.getDueDate().isBefore(LocalDate.now())) {
-            return true;
-        }
-
-        return false;
+        return bookUser.getDueDate().isBefore(LocalDate.now());
 
     }
 
-    public BookUser markAsReturned(UUID id) {
+    public BookUserDto markAsReturned(UUID id) {
 
-        BookUser bookUser = bookUserRepository.getById(id);
+        BookUser bookUser = bookUserRepository.findById(id).orElseThrow(
+                () -> new RuntimeException("Book does not exist")
+        );
 
         bookUser.setDueDate(LocalDate.now());
         bookUser.setReturned(true);
-        return bookUserRepository.save(bookUser);
+
+        return bookUserMapper.toBookUser(bookUserRepository.save(bookUser));
+    }
+
+    private User findUser(UUID id) {
+        return userRepository.findById(id).orElseThrow(
+                () -> new RuntimeException("User not found")
+        );
+    }
+
+    private Book findBook(UUID id) {
+        return bookRepository.findById(id).orElseThrow(
+                () -> new RuntimeException("Book not found")
+        );
     }
 }

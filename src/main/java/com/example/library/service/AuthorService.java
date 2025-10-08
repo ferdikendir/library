@@ -1,11 +1,11 @@
 package com.example.library.service;
 
+import com.example.library.dto.author.*;
 import com.example.library.entity.Author;
 import com.example.library.repository.AuthorRepository;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 public class AuthorService {
@@ -20,20 +20,53 @@ public class AuthorService {
         return authorRepository.findById(id).orElse(null);
     }
 
-    public List<Author> getAllAuthors() {
-        return authorRepository.findAll();
+    public List<AuthorDto> getAllAuthors() {
+        List<AuthorDto> authors = new ArrayList<AuthorDto>();
+
+        for (Author author : authorRepository.findAll()) {
+            AuthorDto authorDto = new AuthorDto();
+
+            authorDto.setId(author.getId());
+            authorDto.setName(author.getName());
+            authorDto.setSurname(author.getSurname());
+
+            authors.add(authorDto);
+        }
+
+        return authors;
     }
 
-    public Author saveAuthor(Author author) {
-        return authorRepository.save(author);
+    public AuthorDto saveAuthor(AuthorInsertRequest authorInsertRequest) {
+        Author author = new Author();
+
+        author.setName(authorInsertRequest.getName());
+        author.setSurname(authorInsertRequest.getSurname());
+
+        Author addedAuthor = authorRepository.save(author);
+
+        AuthorDto authorDto = new AuthorDto();
+
+        authorDto.setId(addedAuthor.getId());
+        authorDto.setName(addedAuthor.getName());
+        authorDto.setSurname(addedAuthor.getSurname());
+
+        return authorDto;
     }
 
-    public Author updateAuthor(Author author) {
-        Author updatedAuthor = getAuthorById(author.getId());
+    public AuthorDto updateAuthor(AuthorUpdateRequest authorUpdateRequest) {
+        Author author = getAuthorById(authorUpdateRequest.getId());
 
-        updatedAuthor.setName(author.getName());
-        updatedAuthor.setSurname(author.getSurname());
-        return authorRepository.save(updatedAuthor);
+        author.setName(authorUpdateRequest.getName());
+        author.setSurname(authorUpdateRequest.getSurname());
+        Author updatedAuthor =   authorRepository.save(author);
+
+        AuthorDto authorDto = new AuthorDto();
+
+        authorDto.setId(updatedAuthor.getId());
+        authorDto.setName(updatedAuthor.getName());
+        authorDto.setSurname(updatedAuthor.getSurname());
+
+        return authorDto;
     }
 
 }
